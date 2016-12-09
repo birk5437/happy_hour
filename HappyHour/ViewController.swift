@@ -21,13 +21,13 @@ class ViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = NSURL(string: "http://burkeramsey.com")!
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url){ (data, response, error) -> Void in
+        let url = URL(string: "http://burkeramsey.com")!
+        let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) -> Void in
             if let urlContent = data {
                 // https://www.udemy.com/the-complete-ios-9-developer-course/learn/v4/t/lecture/3193384
-                let webContent = NSString(data: urlContent, encoding: NSUTF8StringEncoding)
+                let webContent = NSString(data: urlContent, encoding: String.Encoding.utf8.rawValue)
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     print(webContent)
                     // do something with data
                 })
@@ -35,17 +35,17 @@ class ViewController: UIViewController, UITableViewDelegate {
             } else {
                 // Show error
             }
-        }
+        })
         task.resume()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellContent.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")
+    func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell")
         cell.textLabel?.text = cellContent[indexPath.row]
         return cell
     }
